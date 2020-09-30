@@ -21,6 +21,7 @@ class ViewController: UIViewController {
         let widget = connect.GetWidget()
         self.present(widget, animated: true, completion: nil)
     }
-}```
+}
+```
 
-Do no forget to replace <YOUR_MONO_PUBLIC_KEY> with you real public key. Do not use your secret key anywhere with this package.
+Do no forget to replace <YOUR_MONO_PUBLIC_KEY> with your real public key. Do not use your secret key anywhere with this package.
