@@ -24,4 +24,4 @@ class ViewController: UIViewController {
 }
 ```
 
-Do no forget to replace <YOUR_MONO_PUBLIC_KEY> with your real public key. Do not use your secret key anywhere with this package.
+Do not forget to replace <YOUR_MONO_PUBLIC_KEY> with your real public key. Do not use your secret key anywhere with this package.
