@@ -2,6 +2,11 @@
 
 This package makes it very easy to use Mono connect widget in your swift/ios project.
 
+Request access here:
+https://app.withmono.com/register
+
+
+
 ## Usage
 
 ```swift
