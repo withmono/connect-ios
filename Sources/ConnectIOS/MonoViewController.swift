@@ -43,7 +43,7 @@ public class MonoViewController: UIViewController, WKUIDelegate {
         webView.navigationDelegate = self
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
-        
+
         return webView
     }()
     
@@ -60,11 +60,11 @@ public class MonoViewController: UIViewController, WKUIDelegate {
         setupUI()
         
         let contentController = self.webView.configuration.userContentController
-        contentController.add(self, name: "done")
-        contentController.add(self, name: "closed")
-        
-        let html = MonoHtmlSource(publicKey: publicKey).GetString()
-        webView.loadHTMLString(html, baseURL: Bundle.main.resourceURL)
+        contentController.add(self, name: "mono")
+
+        let url = URL(string: "https://connect.withmono.com/?key=\(publicKey)&version=0.2.0")
+        let request = URLRequest(url: url!)
+        webView.load(request)
     }
     
     func setupUI() {
@@ -90,22 +90,46 @@ public class MonoViewController: UIViewController, WKUIDelegate {
 }
 
 extension MonoViewController: WKScriptMessageHandler {
-    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == "done", let messageBody = message.body as? [String: Any]{
-            let data = messageBody["data"] as? [String: Any]
-            self.successHandler(data?["code"] as! String)
-            self.dismiss(animated: true, completion: nil)
+    public func parseJSON(str: String?) -> [String: AnyObject]? {
+        if let data = str?.data(using: .utf8) {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: AnyObject]
+                return json
+            } catch let error as NSError {
+                print("Failed to load: \(error.localizedDescription)")
+                return nil
+            }
         }
         
-        if message.name == "closed" {
-            self.closeHandler()
-            self.dismiss(animated: true, completion: nil)
+        return nil
+    }
+    
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "mono", let messageBody = parseJSON(str: (message.body as! String)){
+            let data = messageBody["data"] as? [String: Any]
+            let type = messageBody["type"] as! String
+
+            switch type {
+            case "mono.connect.widget.account_linked":
+                self.successHandler(data?["code"] as! String)
+                self.dismiss(animated: true, completion: nil)
+                break
+            case "mono.connect.widget.closed":
+                self.closeHandler()
+                self.dismiss(animated: true, completion: nil)
+                break
+            default:
+                self.dismiss(animated: true, completion: nil)
+                break
+            }
         }
     }
 }
 
 extension MonoViewController: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webView.evaluateJavaScript("window.MonoClientInterface = window.webkit.messageHandlers.mono;")
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
             self.progressView.isHidden = true;
         })
