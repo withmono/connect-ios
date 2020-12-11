@@ -11,6 +11,16 @@ public class MonoConnect {
         self.successHandler = onSuccess
     }
     
+    public func Reauthorise(code: String) -> UIViewController {
+        let widget = MonoViewController(publicKey: self.publicKey, reauth_code: code, onClose: {() -> Void in
+            self.closeHandler()
+        }, onSuccess: {(code: String) -> Void in
+            self.successHandler(code)
+        })
+        
+        return widget
+    }
+
     public func GetWidget() -> UIViewController {
         let widget = MonoViewController(publicKey: self.publicKey, onClose: {() -> Void in
             self.closeHandler()
