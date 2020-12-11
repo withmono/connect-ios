@@ -11,12 +11,14 @@ import WebKit
 
 public class MonoViewController: UIViewController, WKUIDelegate {
     var publicKey: String
+    var code: String?
     let closeHandler: (() -> Void?)
     let successHandler: ((_ authCode: String) -> Void?)
     var progressView: UIProgressView
     
-    init(publicKey: String, onClose: @escaping (() -> Void?), onSuccess: @escaping ((_ authCode: String) -> Void?)) {
+    init(publicKey: String, reauth_code: String? = nil, onClose: @escaping (() -> Void?), onSuccess: @escaping ((_ authCode: String) -> Void?)) {
         self.publicKey = publicKey
+        self.code = reauth_code
         self.successHandler = onSuccess
         self.closeHandler = onClose
         
@@ -62,8 +64,20 @@ public class MonoViewController: UIViewController, WKUIDelegate {
         let contentController = self.webView.configuration.userContentController
         contentController.add(self, name: "mono")
 
-        let url = URL(string: "https://connect.withmono.com/?key=\(publicKey)&version=0.2.0")
-        let request = URLRequest(url: url!)
+        var components = URLComponents()
+        components.scheme="https"
+        components.host="connect.withmono.com"
+        let queryItemKey = URLQueryItem(name: "key", value: publicKey)
+        let queryItemVersion = URLQueryItem(name: "version", value: "0.2.0")
+        var qs = [queryItemKey, queryItemVersion]
+
+        if(code != nil) {
+          let queryItemCode = URLQueryItem(name: "code", value: code)
+          qs.append(queryItemCode)
+        }
+        components.queryItems = qs;
+
+        let request = URLRequest(url: components.url!)
         webView.load(request)
     }
     
