@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     
     // MARK: Actions
     @IBAction func ReauthoriseUser(_ sender: UIButton) {
-        let connect = MonoConnect(publicKey: "live_pk_wC6uGSyaBdeenGnfZ4oB", onClose: {() -> Void in print("widget closed")}, onSuccess: {(code) -> Void in print("successfully reauthorised account: \(code)")})
+        let connect = MonoConnect(publicKey: <YOUR_MONO_PUBLIC_KEY_HERE>, onClose: {() -> Void in print("widget closed")}, onSuccess: {(code) -> Void in print("successfully reauthorised account: \(code)")})
         let widget = connect.Reauthorise(code: "code_xyz")
         self.present(widget, animated: true, completion: nil)
     }
