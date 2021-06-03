@@ -13,6 +13,9 @@ let package = Package(
         .library(
             name: "ConnectKit",
             targets: ["ConnectKit"]),
+        .library(
+            name: "ConnectIOS",
+            targets: ["ConnectIOS"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -23,9 +26,14 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "ConnectKit",
+            path: "Sources/ConnectKit",
+            dependencies: []),
+        .target(
+            name: "ConnectIOS",
+            path: "Sources/ConnectIOS",
             dependencies: []),
         .testTarget(
-            name: "connect-iosTests",
+            name: "ConnectKitTests",
             dependencies: ["ConnectKit"]),
     ]
 )
