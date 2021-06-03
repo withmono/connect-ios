@@ -32,6 +32,9 @@ let package = Package(
             name: "ConnectIOS",
             path: "Sources/ConnectIOS",
             dependencies: []),
+        .target(
+            name: "ConnectIOS",
+            dependencies: []),
         .testTarget(
             name: "ConnectKitTests",
             dependencies: ["ConnectKit"]),
