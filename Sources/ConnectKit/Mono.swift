@@ -7,9 +7,11 @@
 import Foundation
 import UIKit
 
-public let Mono = MonoController()
+let Mono = MonoController()
 
 public class MonoController {
+
+    public init(){ }
 
     public func create(configuration: MonoConfiguration) -> UIViewController {
 

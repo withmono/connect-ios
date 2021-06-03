@@ -6,7 +6,11 @@
 
 import Foundation
 
-var eventNames = [
+
+
+class ConnectEventMapper {
+
+public var eventNames = [
                     "mono.connect.widget_opened": "OPENED",
                     "mono.connect.error_occured": "ERROR",
                     "mono.connect.institution_selected": "INSTITUTION_SELECTED",
@@ -20,7 +24,6 @@ var eventNames = [
                     "mono.connect.widget.closed":"CLOSED",
                  ]
 
-class ConnectEventMapper {
   func map(_ dictionary: [String: Any]) -> ConnectEvent? {
 
     // get event type
