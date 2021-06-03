@@ -19,7 +19,7 @@ For complete information about Mono Connect, head to the [docs](https://docs.mon
 
 ### Manual
 
-Get the latest version of ConnectIOS and embed it into your application.
+Get the latest version of ConnectKit and embed it into your application.
 
 Go to File -> Swift Packages -> Add Package Dependency... 
 
@@ -41,11 +41,16 @@ yarn add mono-node
 
 - Xcode 11.0 or greater
 - iOS 9.0 or greater
-- The latest version of the ConnectIOS
+- The latest version of the ConnectKit
 
-## Opening Mono Connect
+## Usage
 
 Before you can open Mono Connect, you need to first create a `publicKey`. Your `publicKey` can be found in the [Mono Dashboard](https://app.withmono.com/apps). 
+
+#### Import ConnectKit
+```swift
+import ConnectKit
+```
 
 #### Create a MonoConfiguration
 ```swift
@@ -153,27 +158,38 @@ On a button click, get an auth `code` for a first time user from [Mono Connect W
 **Note:** Exchange tokens or a `code` must be passed to your backend for final verification with your `secretKey` for you can retrieve financial information. See [Exchange Token](https://docs.mono.co/reference/authentication-endpoint).
 
 ```swift
-@IBAction func AuthenticateWithMono(_ sender: UIButton) {
+import UIKit
+import ConnectKit
+
+class ViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+    }
+
+	@IBAction func AuthenticateWithMono(_ sender: UIButton) {
         
-    let configuration = MonoConfiguration(
-        publicKey: "test_pk_RZgJjkjTKYMiuG3smlQu",
-        onSuccess: { code in
-            print("Success with code: \(code)")
-        }
-    )
+		let configuration = MonoConfiguration(
+   			publicKey: "test_pk_RZgJjkjTKYMiuG3smlQu",
+	        onSuccess: { code in
+    	        print("Success with code: \(code)")
+        	}
+	    )
 
-    configuration.onEvent = { event in
-        print(event.eventName)
-		print(event.metadata.timestamp)
-    }
+    	configuration.onEvent = { event in
+        	print(event.eventName)
+			print(event.metadata.timestamp)
+    	}
 
-    configuration.onClose = { () in
-        print("Widget closed.")
-    }
+	    configuration.onClose = { () in
+    	    print("Widget closed.")
+    	}
 
-    let widget = Mono.create(configuration: configuration)
+    	let widget = Mono.create(configuration: configuration)
 
-    self.present(widget, animated: true, completion: nil)
+    	self.present(widget, animated: true, completion: nil)
+	}
 }
 ```
 ##### Reauthorising an account with MFA
@@ -187,20 +203,30 @@ On a button click, get an auth `code` for a first time user from [Mono Connect W
 **Note:** The reauth token expires in 10 minutes. You need to request a token on your backend and pass it to the frontend for use immediately.
 
 ```swift
-@IBAction func ReauthoriseUser(_ sender: UIButton) {
-        
-    let configuration = MonoConfiguration(
-        publicKey: "test_pk_RZgJjkjTKYMiuG3smlQu",
-        onSuccess: { code in
-            print("Success with code: \(code)")
-        },
-		reauthCode: "code_xyz"
-    )
+import UIKit
+import ConnectKit
 
-    let widget = Mono.create(configuration: configuration)
-
-    self.present(widget, animated: true, completion: nil)
+class ViewController: UIViewController {
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+    }
+
+	@IBAction func ReauthoriseUser(_ sender: UIButton) {
+        
+   	 let configuration = MonoConfiguration(
+   		    publicKey: "test_pk_RZgJjkjTKYMiuG3smlQu",
+   		    onSuccess: { code in
+            	print("Success with code: \(code)")
+	        },
+			reauthCode: "code_xyz"
+	    )
+
+    	let widget = Mono.create(configuration: configuration)
+
+	    self.present(widget, animated: true, completion: nil)
+	}
 }
 ```
 
