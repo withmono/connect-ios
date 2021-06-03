@@ -21,6 +21,10 @@ For complete information about Mono Connect, head to the [docs](https://docs.mon
 
 Get the latest version of ConnectIOS and embed it into your application.
 
+Go to File -> Swift Packages -> Add Package Dependency... 
+
+Then enter the URL for this package `https://github.com/withmono/connect-ios.git` and select the most recent version.
+
 <!--
 
 Install the package with:
