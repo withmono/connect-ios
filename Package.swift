@@ -9,8 +9,7 @@ let package = Package(
         .iOS(.v9)
     ],
     products: [
-        .library(name: "ConnectIOS", targets: ["ConnectIOS"]),
-        .library(name: "ConnectKit", targets: ["ConnectKit"]),
+        .library(name: "ConnectKit", targets: ["ConnectIOS", "ConnectKit"]),
     ],
     dependencies: [],
     targets: [
