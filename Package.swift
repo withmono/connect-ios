@@ -26,14 +26,15 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "ConnectKit",
-            path: "Sources/ConnectKit",
-            dependencies: []),
+            dependencies: [],
+            path: "Sources/ConnectKit"),
         .target(
             name: "ConnectIOS",
-            path: "Sources/ConnectIOS",
-            dependencies: []),
+            dependencies: [],
+            path: "Sources/ConnectIOS"),
         .testTarget(
             name: "ConnectKitTests",
-            dependencies: ["ConnectKit"]),
+            dependencies: ["ConnectKit"],
+            path: "Tests/ConnectKitTests"),
     ]
 )
