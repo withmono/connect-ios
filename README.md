@@ -21,8 +21,6 @@ For complete information about Mono Connect, head to the [docs](https://docs.mon
 
 Get the latest version of ConnectIOS and embed it into your application.
 
-Embed ConnectIOS into your application, for example by dragging and dropping the file onto the Embed Frameworks build phase as shown below.
-
 <!--
 
 Install the package with:
