@@ -7,9 +7,13 @@
 import Foundation
 import UIKit
 
-let Mono = MonoController()
+class Mono {
 
-class MonoController {
+    static let sharedInstance: Mono = {
+        let instance = Mono()
+
+        return instance
+    }()
 
     init(){ }
 
