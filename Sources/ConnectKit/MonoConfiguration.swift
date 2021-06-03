@@ -10,14 +10,14 @@ import Foundation
 public class MonoConfiguration {
 
     // required parameters
-    var publicKey: String
-    var onSuccess: ((_ authCode: String) -> Void?)
+    public var publicKey: String
+    public var onSuccess: ((_ authCode: String) -> Void?)
 
     // optional parameters
-    var reference: String?
-    var onClose: (() -> Void?)?
-    var onEvent: ((_ data: ConnectEvent) -> Void?)?
-    var reauthCode: String?
+    public var reference: String?
+    public var onClose: (() -> Void?)?
+    public var onEvent: ((_ data: ConnectEvent) -> Void?)?
+    public var reauthCode: String?
 
     public init(publicKey: String, onSuccess: @escaping ((_ authCode: String) -> Void?), reference: String? = nil, reauthCode: String? = nil, onClose: (() -> Void?)? = nil, onEvent: ((_ data: ConnectEvent) -> Void?)? = nil){
 
