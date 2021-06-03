@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-let Mono = MonoController()
+public let Mono = MonoController()
 
 public class MonoController {
 
