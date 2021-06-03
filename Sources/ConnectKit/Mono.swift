@@ -1,6 +1,5 @@
 //
 //  Mono.swift
-//  Mono Test
 //
 //  Created by Tristan Tsvetanov on 02021-06-02.
 //
