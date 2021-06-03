@@ -7,7 +7,7 @@
 import Foundation
 import UIKit
 
-let MonoConnect = MonoController()
+let Mono = MonoController()
 
 class MonoController {
 
