@@ -23,5 +23,6 @@ let package = Package(
         .target(name: "ConnectIOS", dependencies: []),
         .target(name: "ConnectKit", dependencies: []),
         .testTarget(name: "ConnectKitTests", dependencies: ["ConnectKit"]),
+        .testTarget(name: "ConnectIOSTests", dependencies: ["ConnectIOS"]),
     ]
 )
