@@ -7,7 +7,7 @@
 import Foundation
 import UIKit
 
-class Mono {
+public class Mono {
 
     static let sharedInstance: Mono = {
         let instance = Mono()
