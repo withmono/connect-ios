@@ -9,6 +9,26 @@ let package = Package(
         .iOS(.v9)
     ],
     products: [
+        .library(name: "ConnectIOS", targets: ["ConnectIOS"]),
+        .library(name: "ConnectKit", targets: ["ConnectKit"]),
+    ],
+    dependencies: [],
+    targets: [
+        .target(
+            name: "ConnectIOS",
+            dependencies: []),
+        .target(
+            name: "ConnectKit",
+            dependencies: [])
+    ]
+)
+/*
+let package = Package(
+    name: "ConnectKit",
+    platforms: [
+        .iOS(.v9)
+    ],
+    products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(name: "ConnectIOS", targets: ["ConnectIOS"]),
         .library(name: "ConnectKit", targets: ["ConnectKit"]),
@@ -26,3 +46,4 @@ let package = Package(
         .testTarget(name: "ConnectIOSTests", dependencies: ["ConnectIOS"]),
     ]
 )
+*/
