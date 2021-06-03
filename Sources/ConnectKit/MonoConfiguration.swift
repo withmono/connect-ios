@@ -19,7 +19,7 @@ public class MonoConfiguration {
     var onEvent: ((_ data: ConnectEvent) -> Void?)?
     var reauthCode: String?
 
-    init(publicKey: String, onSuccess: @escaping ((_ authCode: String) -> Void?), reference: String? = nil, reauthCode: String? = nil, onClose: (() -> Void?)? = nil, onEvent: ((_ data: ConnectEvent) -> Void?)? = nil){
+    public init(publicKey: String, onSuccess: @escaping ((_ authCode: String) -> Void?), reference: String? = nil, reauthCode: String? = nil, onClose: (() -> Void?)? = nil, onEvent: ((_ data: ConnectEvent) -> Void?)? = nil){
 
         self.publicKey = publicKey
         self.onSuccess = onSuccess
