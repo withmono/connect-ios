@@ -9,19 +9,19 @@ import Foundation
 
 struct ConnectMetadata {
 
-    let type: String // type of event mono.connect.xxxx
-    let reference: String? // reference passed through the connect setup
-    let pageName: String? // name of page the widget exited on
-    let prevAuthMethod: String? // auth method before it was last changed
-    let authMethod: String? // current auth method
-    let mfaType: String? // type of MFA the current user/bank requires
-    let selectedAccountsCount: Int? // number of accounts selected by the user
-    let errorType: String? // error thrown by widget
-    let errorMessage: String? // error message describing the error
-    let institutionId: String? // id of institution
-    let institutionName: String? // name of institution
-    let code: String? // the code returned when a link is successful, see https://docs.mono.co/reference/authentication-endpoint
-    let timestamp: Date // timestamp of the event converted to Date object
+    public let type: String // type of event mono.connect.xxxx
+    public let reference: String? // reference passed through the connect setup
+    public let pageName: String? // name of page the widget exited on
+    public let prevAuthMethod: String? // auth method before it was last changed
+    public let authMethod: String? // current auth method
+    public let mfaType: String? // type of MFA the current user/bank requires
+    public let selectedAccountsCount: Int? // number of accounts selected by the user
+    public let errorType: String? // error thrown by widget
+    public let errorMessage: String? // error message describing the error
+    public let institutionId: String? // id of institution
+    public let institutionName: String? // name of institution
+    public let code: String? // the code returned when a link is successful, see https://docs.mono.co/reference/authentication-endpoint
+    public let timestamp: Date // timestamp of the event converted to Date object
 
     init(type: String, reference: String? = nil, pageName: String? = nil, prevAuthMethod: String? = nil, authMethod: String? = nil, mfaType: String? = nil, selectedAccountsCount: Int? = nil, errorType: String? = nil, errorMessage: String? = nil, institutionId: String? = nil, institutionName: String? = nil, code: String? = nil, timestamp: Date) {
         self.type = type
@@ -44,8 +44,8 @@ struct ConnectMetadata {
 public class ConnectEvent {
 
 
-    let eventName: String // name of event XXXXX
-    let metadata: ConnectMetadata // holds all the related metadata
+    public let eventName: String // name of event XXXXX
+    public let metadata: ConnectMetadata // holds all the related metadata
 
 //    init(type: String, reference: String, pageName: String){
 //        self.type = type

@@ -12,12 +12,6 @@ let Mono = MonoController()
 
 public class MonoController {
 
-    var widget: UIViewController?
-
-    init(){
-
-    }
-
     public func create(configuration: MonoConfiguration) -> UIViewController {
 
         let widget = MonoWidget(configuration: configuration)
