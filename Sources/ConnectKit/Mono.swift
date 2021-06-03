@@ -9,15 +9,9 @@ import UIKit
 
 public class Mono {
 
-    public static let sharedInstance: Mono = {
-        let instance = Mono()
-
-        return instance
-    }()
-
     init(){ }
 
-    public func create(configuration: MonoConfiguration) -> UIViewController {
+    public static func create(configuration: MonoConfiguration) -> UIViewController {
 
         let widget = MonoWidget(configuration: configuration)
 
