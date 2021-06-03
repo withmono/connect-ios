@@ -9,7 +9,7 @@ import UIKit
 
 public class Mono {
 
-    static let sharedInstance: Mono = {
+    public static let sharedInstance: Mono = {
         let instance = Mono()
 
         return instance
