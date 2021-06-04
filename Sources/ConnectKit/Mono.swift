@@ -13,9 +13,11 @@ public class Mono {
     
     public static func create(configuration: MonoConfiguration) -> UIViewController {
         
-        if(configuration.reauthCode != nil){
-            #error("You cannot pass a reauthCode: String to the default create function, use Mono.reauthorise() instead.")
-        }
+        let flagError = configuration.reauthCode != nil
+        
+        #if flagError
+        #error("You cannot pass a reauthCode: String to the default create function, use Mono.reauthorise() instead.")
+        #endif
 
         let widget = MonoWidget(configuration: configuration)
 
@@ -25,9 +27,11 @@ public class Mono {
     
     public static func reauthorise(configuration: MonoConfiguration) -> UIViewController {
         
-        if(configuration.reauthCode == nil){
-            #error("Reauthorisation requires you to pass a reauthCode: String to the configuration object.")
-        }
+        let flagError = configuration.reauthCode == nil
+        
+        #if flagError
+        #error("Reauthorisation requires you to pass a reauthCode: String to the configuration object.")
+        #endif
 
         let widget = MonoWidget(configuration: configuration)
 
