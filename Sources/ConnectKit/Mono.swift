@@ -15,10 +15,10 @@ public class Mono {
         
         let flagError = configuration.reauthCode != nil
         
-        #if flagError
-        #error("You cannot pass a reauthCode: String to the default create function, use Mono.reauthorise() instead.")
-        #endif
-
+        if flagError{
+            print("You cannot pass a reauthCode: String to the default create function, use Mono.reauthorise() instead.")
+        }
+        
         let widget = MonoWidget(configuration: configuration)
 
         return widget
@@ -29,10 +29,10 @@ public class Mono {
         
         let flagError = configuration.reauthCode == nil
         
-        #if flagError
-        #error("Reauthorisation requires you to pass a reauthCode: String to the configuration object.")
-        #endif
-
+        if flagError {
+            print("Reauthorisation requires you to pass a reauthCode: String to the configuration object.")
+        }
+        
         let widget = MonoWidget(configuration: configuration)
 
         return widget
