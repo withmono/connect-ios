@@ -17,7 +17,7 @@ public class Mono {
             #error("You cannot pass a reauthCode: String to the default create function, use Mono.reauthorise() instead.")
         }
 
-        let widget = MonoWidget(publicKey: defaultPublicKey, configuration: configuration)
+        let widget = MonoWidget(configuration: configuration)
 
         return widget
 
