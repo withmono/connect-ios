@@ -100,8 +100,8 @@ The closure is called when a user has successfully onboarded their account. It s
 ```swift
 let configuration = MonoConfiguration(
   publicKey: "test_pk_...",
-  onSuccess: { token in
-    print("Success with token: \(token)")
+  onSuccess: { code in
+    print("Success with token: \(code)")
  })
 ```
 
@@ -123,7 +123,7 @@ This optional closure is called when certain events in the Mono Connect flow hav
 See the [ConnectEvent](#connectEvent) object below for details.
 
 ```swift
-configuration.onEvent = { event in
+configuration.onEvent = { (event) -> Void in
   print(event.eventName)
 }
 ```
@@ -171,13 +171,13 @@ class ViewController: UIViewController {
 	@IBAction func AuthenticateWithMono(_ sender: UIButton) {
         
 		let configuration = MonoConfiguration(
-   			publicKey: "test_pk_RZgJjkjTKYMiuG3smlQu",
+   			publicKey: "test_pk_...",
 	        onSuccess: { code in
     	        print("Success with code: \(code)")
         	}
 	    )
 
-    	configuration.onEvent = { event in
+    	configuration.onEvent = { (event) -> Void in
         	print(event.eventName)
 			print(event.metadata.timestamp)
     	}
@@ -216,14 +216,14 @@ class ViewController: UIViewController {
 	@IBAction func ReauthoriseUser(_ sender: UIButton) {
         
    	 let configuration = MonoConfiguration(
-   		    publicKey: "test_pk_RZgJjkjTKYMiuG3smlQu",
+   		    publicKey: "test_pk_...",
    		    onSuccess: { code in
             	print("Success with code: \(code)")
 	        },
 			reauthCode: "code_xyz"
 	    )
 
-    	let widget = Mono.create(configuration: configuration)
+    	let widget = Mono.reauthorise(configuration: configuration)
 
 	    self.present(widget, animated: true, completion: nil)
 	}
