@@ -19,10 +19,9 @@ public class ConnectMetadata {
     public let errorMessage: String? // error message describing the error
     public let institutionId: String? // id of institution
     public let institutionName: String? // name of institution
-    public let code: String? // the code returned when a link is successful, see https://docs.mono.co/reference/authentication-endpoint
     public let timestamp: Date // timestamp of the event converted to Date object
 
-    public init(type: String, reference: String? = nil, pageName: String? = nil, prevAuthMethod: String? = nil, authMethod: String? = nil, mfaType: String? = nil, selectedAccountsCount: Int? = nil, errorType: String? = nil, errorMessage: String? = nil, institutionId: String? = nil, institutionName: String? = nil, code: String? = nil, timestamp: Date) {
+    public init(type: String, reference: String? = nil, pageName: String? = nil, prevAuthMethod: String? = nil, authMethod: String? = nil, mfaType: String? = nil, selectedAccountsCount: Int? = nil, errorType: String? = nil, errorMessage: String? = nil, institutionId: String? = nil, institutionName: String? = nil, timestamp: Date) {
         self.type = type
         self.reference = reference
         self.pageName = pageName
@@ -34,7 +33,6 @@ public class ConnectMetadata {
         self.errorMessage = errorMessage
         self.institutionId = institutionId
         self.institutionName = institutionName
-        self.code = code
         self.timestamp = timestamp
     }
 

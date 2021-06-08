@@ -93,16 +93,17 @@ let configuration = MonoConfiguration(
 ```
 
 ### <a name="onSuccess"></a> `onSuccess`
-**((_ token: String) -> Void): Required**
+**((_ code: String) -> Void): Required**
 
-The closure is called when a user has successfully onboarded their account. It should take a single String argument containing the token that can be [exchanged for an account id](https://docs.mono.co/reference/authentication-endpoint).
+The closure is called when a user has successfully onboarded their account. It should take a single String argument containing the code that can be [exchanged for an account id](https://docs.mono.co/reference/authentication-endpoint).
 
 ```swift
 let configuration = MonoConfiguration(
   publicKey: "test_pk_...",
   onSuccess: { code in
     print("Success with token: \(code)")
- })
+  }
+)
 ```
 
 ### <a name="onClose"></a> `onClose `
@@ -116,7 +117,7 @@ configuration.onClose = { () in
 }
 ```
 ### <a name="onEvent"></a> `onEvent `
-**((_ data: ConnectEvent) -> Void): Optional**
+**((_ event: ConnectEvent) -> Void): Optional**
 
 This optional closure is called when certain events in the Mono Connect flow have occurred, for example, when the user selected an institution. This enables your application to gain further insight into what is going on as the user goes through the Mono Connect flow.
 
@@ -147,6 +148,41 @@ Check Mono [docs](https://docs.mono.co/reference/data-sync-overview) on how to o
 configuration.reauthCode = "code_xyz"
 ```
 
+### <a name="connectEvent"></a> ConnectEvent
+
+#### <a name="eventName"></a> `eventName`
+
+Event names corespond to the `type` key returned by the event data. Possible options are in the table below.
+
+| Event Name | Description |
+| ----------- | ----------- |
+| OPENED | Triggered when the user opens the Connect Widget. |
+| EXIT | Triggered when the user closes the Connect Widget. |
+| INSTITUTION_SELECTED | Triggered when the user selects an institution. |
+| AUTH_METHOD_SWITCHED | Triggered when the user changes authentication method from internet to mobile banking, or vice versa. |
+| SUBMIT_CREDENTIALS | Triggered when the user presses Log in. |
+| ACCOUNT_LINKED | Triggered when the user successfully links their account. |
+| ACCOUNT_SELECTED | Triggered when the user selects a new account. |
+| ERROR | Triggered when the widget reports an error.|
+
+
+#### <a name="dataObject"></a> `data`
+The data object returned from the onEvent callback.
+
+```swift
+type: String // type of event mono.connect.xxxx
+reference: String? // reference passed through the connect config
+pageName: String? // name of page the widget exited on
+prevAuthMethod: String? // auth method before it was last changed
+authMethod: String? // current auth method
+mfaType: String? // type of MFA the current user/bank requires
+selectedAccountsCount: Int? // number of accounts selected by the user
+errorType: String? // error thrown by widget
+errorMessage: String? // error message describing the error
+institutionId: String? // id of institution
+institutionName: String? // name of institution
+timestamp: Date // timestamp of the event as a Date object
+```
 
 
 ## Examples
@@ -163,33 +199,32 @@ import ConnectKit
 
 class ViewController: UIViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    // Do any additional setup after loading the view.
+  }
+
+  @IBAction func AuthenticateWithMono(_ sender: UIButton) {
+        
+    let configuration = MonoConfiguration(
+   	  publicKey: "test_pk_...",
+      onSuccess: { code in
+        print("Success with code: \(code)")
+      })
+
+    configuration.onEvent = { (event) -> Void in
+      print(event.eventName)
+      print(event.metadata.timestamp)
     }
 
-	@IBAction func AuthenticateWithMono(_ sender: UIButton) {
-        
-		let configuration = MonoConfiguration(
-   			publicKey: "test_pk_...",
-	        onSuccess: { code in
-    	        print("Success with code: \(code)")
-        	}
-	    )
+    configuration.onClose = { () in
+      print("Widget closed.")
+    }
 
-    	configuration.onEvent = { (event) -> Void in
-        	print(event.eventName)
-			print(event.metadata.timestamp)
-    	}
+    let widget = Mono.create(configuration: configuration)
 
-	    configuration.onClose = { () in
-    	    print("Widget closed.")
-    	}
-
-    	let widget = Mono.create(configuration: configuration)
-
-    	self.present(widget, animated: true, completion: nil)
-	}
+    self.present(widget, animated: true, completion: nil)
+  }
 }
 ```
 ##### Reauthorising an account with MFA
@@ -207,26 +242,26 @@ import UIKit
 import ConnectKit
 
 class ViewController: UIViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-    }
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    // Do any additional setup after loading the view.
+  }
 
-	@IBAction func ReauthoriseUser(_ sender: UIButton) {
-        
-   	 let configuration = MonoConfiguration(
-   		    publicKey: "test_pk_...",
-   		    onSuccess: { code in
-            	print("Success with code: \(code)")
-	        },
-			reauthCode: "code_xyz"
-	    )
+  @IBAction func ReauthoriseUser(_ sender: UIButton) {
 
-    	let widget = Mono.reauthorise(configuration: configuration)
+    let configuration = MonoConfiguration(
+      publicKey: "test_pk_...",
+      onSuccess: { code in
+        print("Success with code: \(code)")
+      },
+      reauthCode: "code_xyz"
+    )
 
-	    self.present(widget, animated: true, completion: nil)
-	}
+    let widget = Mono.reauthorise(configuration: configuration)
+
+    self.present(widget, animated: true, completion: nil)
+  }
 }
 ```
 

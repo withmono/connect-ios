@@ -20,8 +20,6 @@ public var eventNames = [
                     "mono.connect.mfa_submitted": "SUBMIT_MFA",
                     "mono.connect.account_linked": "ACCOUNT_LINKED",
                     "mono.connect.account_selected": "ACCOUNT_SELECTED",
-                    "mono.connect.widget.account_linked":"SUCCESS",
-                    "mono.connect.widget.closed":"CLOSED",
                  ]
 
   func map(_ dictionary: [String: Any]) -> ConnectEvent? {
@@ -57,8 +55,6 @@ public var eventNames = [
             institutionName = nil
         }
 
-
-        let code = extractProperty(name: "code", data: data) as? String
         var unixTimestamp = extractProperty(name: "timestamp", data: data) as? Int
         if unixTimestamp != nil {
             unixTimestamp = unixTimestamp! / 1000

@@ -15,10 +15,10 @@ public class MonoConfiguration {
     // optional parameters
     public var reference: String?
     public var onClose: (() -> Void?)?
-    public var onEvent: ((_ data: ConnectEvent) -> Void?)?
+    public var onEvent: ((_ event: ConnectEvent) -> Void?)?
     public var reauthCode: String?
 
-    public init(publicKey: String, onSuccess: @escaping ((_ authCode: String) -> Void?), reference: String? = nil, reauthCode: String? = nil, onClose: (() -> Void?)? = nil, onEvent: ((_ data: ConnectEvent) -> Void?)? = nil){
+    public init(publicKey: String, onSuccess: @escaping ((_ authCode: String) -> Void?), reference: String? = nil, reauthCode: String? = nil, onClose: (() -> Void?)? = nil, onEvent: ((_ event: ConnectEvent) -> Void?)? = nil){
 
         self.publicKey = publicKey
         self.onSuccess = onSuccess

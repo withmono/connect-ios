@@ -154,7 +154,7 @@ extension MonoWidget: WKScriptMessageHandler {
             let type = messageBody["type"] as! String
 
             // pass data on to onEvent
-            if self.eventHandler != nil && type != "mono.modal.linked"{
+            if self.eventHandler != nil && type != "mono.modal.linked" && type != "mono.connect.widget.closed" && type != "mono.connect.widget.account_linked"{
                 let connectEvent = ConnectEventMapper().map(messageBody)
                 self.eventHandler!(connectEvent as! ConnectEvent)
             }
