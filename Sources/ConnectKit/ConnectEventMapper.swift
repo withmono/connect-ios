@@ -64,7 +64,7 @@ public var eventNames = [
 
         let timestamp = Date(timeIntervalSince1970: TimeInterval(unixTimestamp!))
 
-        return ConnectEvent(eventName: name, type: type ?? "UNKNOWN", reference: reference, pageName: pageName, prevAuthMethod: prevAuthMethod, authMethod: authMethod, mfaType: mfaType, selectedAccountsCount: selectedAccountsCount, errorType: errorType, errorMessage: errorMessage, institutionId: institutionId, institutionName: institutionName, code: code, timestamp: timestamp)
+        return ConnectEvent(eventName: name, type: type ?? "UNKNOWN", reference: reference, pageName: pageName, prevAuthMethod: prevAuthMethod, authMethod: authMethod, mfaType: mfaType, selectedAccountsCount: selectedAccountsCount, errorType: errorType, errorMessage: errorMessage, institutionId: institutionId, institutionName: institutionName, timestamp: timestamp)
 
     }else{
         return ConnectEvent(eventName: name, type: type ?? "UNKNOWN", timestamp: Date())
