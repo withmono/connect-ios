@@ -319,7 +319,7 @@ If you would like to contribute to the Mono Connect iOS SDK, please make sure to
 
 # Deprecated Implementation
 
-**Please consider migrating to the newest implementation that spports new features such as `onEvent`, `reference`, and `reauthCode`.**
+**Please consider migrating to the newest implementation that supports new features such as `onEvent`, `reference`, and `reauthCode`.**
 
 This package makes it very easy to use Mono connect widget in your swift/ios project.
 
