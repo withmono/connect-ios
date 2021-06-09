@@ -66,7 +66,7 @@ let configuration = MonoConfiguration(
 let widget = Mono.create(configuration: configuration)
 ```
 
-#### Load the Widiget
+#### Show the Widget
 ```swift
 self.present(widget, animated: true, completion: nil)
 ```
@@ -148,9 +148,47 @@ Check Mono [docs](https://docs.mono.co/reference/data-sync-overview) on how to o
 configuration.reauthCode = "code_xyz"
 ```
 
+## API Reference
+
+### Mono Object
+
+The Mono Object provides two functions for easy interaction with the Mono Connect Widget. It provides two main methods `Mono.create(config: MonoConfiguration)` and `Mono.reauthorise(config: MonoConfiguration)` that both take a [MonoConfiguration](#MonoConfiguration).
+
+### <a name="MonoConfiguration"></a> MonoConfiguration
+
+The configuration option is passed to Mono.create(config: MonoConfiguration) or Mono.reauthorise(config: MonoConfiguration). 
+
+```swift
+publicKey: String // required
+onSuccesss: (_ code: String) -> Void // required
+onClose: (() -> Void?)? // optional
+onEvent: ((_ event: ConnectEvent) -> Void?)? // optional
+reference: String // optional
+reauthCode: String // optional
+```
+#### Usage
+
+```swift
+let configuration = MonoConfiguration( // required parameters go in the initializer
+  publicKey: "test_pk_...",
+  onSuccess: { code in
+    print("Success with token: \(code)")
+  }
+)
+// optional parameters can be added as so
+configuration.onEvent = { (event) -> Void in
+  print(event.eventName)
+  print(event.data.institutionName)
+}
+configuration.onClose = { () -> Void in
+  print("Widget closed.")
+}
+configuration.reference = "random_string"
+````
+
 ### <a name="connectEvent"></a> ConnectEvent
 
-#### <a name="eventName"></a> `eventName`
+#### <a name="eventName"></a> `eventName: String`
 
 Event names corespond to the `type` key returned by the event data. Possible options are in the table below.
 
@@ -166,8 +204,8 @@ Event names corespond to the `type` key returned by the event data. Possible opt
 | ERROR | Triggered when the widget reports an error.|
 
 
-#### <a name="dataObject"></a> `data`
-The data object returned from the onEvent callback.
+#### <a name="dataObject"></a> `data: ConnectMetadata`
+The data object of type ConnectMetadata returned from the onEvent callback.
 
 ```swift
 type: String // type of event mono.connect.xxxx
