@@ -312,7 +312,7 @@ If you would like to contribute to the Mono Connect iOS SDK, please make sure to
 
 ## License
 
-[MIT](https://github.com/withmono/mono-node/blob/develop/LICENSE) for more information.
+[MIT](https://github.com/withmono/connect-ios/tree/master/LICENSE) for more information.
 
 
 
