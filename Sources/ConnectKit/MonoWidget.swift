@@ -9,6 +9,9 @@ import UIKit
 import WebKit
 
 public class MonoWidget: UIViewController, WKUIDelegate {
+    
+    // contants
+    let DEPRECATED_EVENTS = ["mono.connect.widget.closed", "mono.connect.widget.account_linked", "mono.modal.closed", "mono.modal.linked"]
 
     // required
     var publicKey: String
@@ -154,7 +157,7 @@ extension MonoWidget: WKScriptMessageHandler {
             let type = messageBody["type"] as! String
 
             // pass data on to onEvent
-            if self.eventHandler != nil && type != "mono.modal.linked" && type != "mono.connect.widget.closed" && type != "mono.connect.widget.account_linked"{
+            if self.eventHandler != nil && !DEPRECATED_EVENTS.contains(type){
                 let connectEvent = ConnectEventMapper().map(messageBody)
                 self.eventHandler!(connectEvent as! ConnectEvent)
             }
