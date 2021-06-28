@@ -38,7 +38,11 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         }else{
             self.code = nil
         }
-
+        if configuration.reference != nil {
+            self.reference = configuration.reference
+        }else{
+            self.reference = nil
+        }
         if(configuration.onClose != nil){
             self.closeHandler = configuration.onClose!
         }else{
