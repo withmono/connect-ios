@@ -10,7 +10,7 @@ import Foundation
 
 class ConnectEventMapper {
 
-public var eventNames = [
+public static var eventNames = [
                     "mono.connect.widget_opened": "OPENED",
                     "mono.connect.error_occured": "ERROR",
                     "mono.connect.institution_selected": "INSTITUTION_SELECTED",
@@ -72,7 +72,7 @@ public var eventNames = [
 
   }
 
-    func extractProperty(name: String, data: [String : Any]) -> Any {
+    static func extractProperty(name: String, data: [String : Any]) -> Any {
         var reference = data[name] as? Any
         return reference
     }
