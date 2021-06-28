@@ -118,7 +118,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         webView.load(request)
         
         if self.eventHandler != nil{
-            let connectEvent = ConnectEvent(eventName: "OPENED", type: "mono.connect.widget_opened", timestamp: Date(), reference: self.reference)
+            let connectEvent = ConnectEvent(eventName: "OPENED", type: "mono.connect.widget_opened", reference: self.reference, timestamp: Date())
             self.eventHandler!(connectEvent as! ConnectEvent)
         }
         
