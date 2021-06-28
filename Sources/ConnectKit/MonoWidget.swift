@@ -116,6 +116,12 @@ public class MonoWidget: UIViewController, WKUIDelegate {
 
         let request = URLRequest(url: components.url!)
         webView.load(request)
+        
+        if self.eventHandler != nil{
+            let connectEvent = ConnectEvent(eventName: "OPENED", type: "mono.connect.widget_opened", timestamp: Date(), reference: self.reference)
+            self.eventHandler!(connectEvent as! ConnectEvent)
+        }
+        
     }
 
     func setupUI() {
@@ -162,7 +168,7 @@ extension MonoWidget: WKScriptMessageHandler {
 
             // pass data on to onEvent
             if self.eventHandler != nil && !DEPRECATED_EVENTS.contains(type){
-                let connectEvent = ConnectEventMapper().map(messageBody)
+                let connectEvent = ConnectEventMapper.map(messageBody)
                 self.eventHandler!(connectEvent as! ConnectEvent)
             }
 

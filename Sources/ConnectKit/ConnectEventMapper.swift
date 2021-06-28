@@ -22,7 +22,7 @@ public var eventNames = [
                     "mono.connect.account_selected": "ACCOUNT_SELECTED",
                  ]
 
-  func map(_ dictionary: [String: Any]) -> ConnectEvent? {
+    static func map(_ dictionary: [String: Any]) -> ConnectEvent? {
 
     // get event type
     var type = dictionary["type"] as? String
