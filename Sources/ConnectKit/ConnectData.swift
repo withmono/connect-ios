@@ -6,7 +6,7 @@
 
 import Foundation
 
-public class ConnectMetadata {
+public class ConnectData {
 
     public let type: String // type of event mono.connect.xxxx
     public let reference: String? // reference passed through the connect setup

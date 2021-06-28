@@ -9,7 +9,7 @@ import Foundation
 public class ConnectEvent {
 
     public let eventName: String // name of event XXXXX
-    public let data: ConnectMetadata // holds all the related data
+    public let data: ConnectData // holds all the related data
 
     public init(eventName: String, type: String, reference: String? = nil, pageName: String? = nil, prevAuthMethod: String? = nil, authMethod: String? = nil, mfaType: String? = nil, selectedAccountsCount: Int? = nil, errorType: String? = nil, errorMessage: String? = nil, institutionId: String? = nil, institutionName: String? = nil, timestamp: Date) {
 

@@ -204,8 +204,8 @@ Event names corespond to the `type` key returned by the event data. Possible opt
 | ERROR | Triggered when the widget reports an error.|
 
 
-#### <a name="dataObject"></a> `data: ConnectMetadata`
-The data object of type ConnectMetadata returned from the onEvent callback.
+#### <a name="dataObject"></a> `data: ConnectData`
+The data object of type ConnectData returned from the onEvent callback.
 
 ```swift
 type: String // type of event mono.connect.xxxx
@@ -252,7 +252,7 @@ class ViewController: UIViewController {
 
     configuration.onEvent = { (event) -> Void in
       print(event.eventName)
-      print(event.metadata.timestamp)
+      print(event.data.timestamp)
     }
 
     configuration.onClose = { () in
