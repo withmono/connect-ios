@@ -4,15 +4,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "ConnectIOS",
+    name: "ConnectKit",
     platforms: [
         .iOS(.v9)
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
-        .library(
-            name: "ConnectIOS",
-            targets: ["ConnectIOS"]),
+        .library(name: "ConnectKit", targets: ["ConnectKit"]),
+        .library(name: "ConnectIOS", targets: ["ConnectIOS"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -21,11 +20,9 @@ let package = Package(
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
-        .target(
-            name: "ConnectIOS",
-            dependencies: []),
-        .testTarget(
-            name: "connect-iosTests",
-            dependencies: ["ConnectIOS"]),
+        .target(name: "ConnectIOS", dependencies: []),
+        .target(name: "ConnectKit", dependencies: []),
+        .testTarget(name: "ConnectKitTests", dependencies: ["ConnectKit"]),
+        .testTarget(name: "ConnectIOSTests", dependencies: ["ConnectIOS"]),
     ]
 )
