@@ -22,7 +22,7 @@ class ConnectEventMapper {
     "mono.connect.account_selected": "ACCOUNT_SELECTED",
  ]
 
-  func map(_ dictionary: [String: Any]) -> ConnectEvent? {
+    static func map(_ dictionary: [String: Any]) -> ConnectEvent? {
 
     // get event type
     var type = dictionary["type"] as? String
@@ -71,7 +71,7 @@ class ConnectEventMapper {
     }
   }
 
-  func extractProperty(name: String, data: [String : Any]) -> Any {
+  static func extractProperty(name: String, data: [String : Any]) -> Any {
     let reference = data[name]
     return reference as Any
   }

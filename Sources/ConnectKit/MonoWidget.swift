@@ -38,7 +38,11 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         }else{
             self.code = nil
         }
-
+        if configuration.reference != nil {
+            self.reference = configuration.reference
+        }else{
+            self.reference = nil
+        }
         if(configuration.onClose != nil){
             self.closeHandler = configuration.onClose!
         }else{
@@ -112,6 +116,12 @@ public class MonoWidget: UIViewController, WKUIDelegate {
 
         let request = URLRequest(url: components.url!)
         webView.load(request)
+        
+        if self.eventHandler != nil{
+            let connectEvent = ConnectEvent(eventName: "OPENED", type: "mono.connect.widget_opened", reference: self.reference, timestamp: Date())
+            self.eventHandler!(connectEvent as! ConnectEvent)
+        }
+        
     }
 
     func setupUI() {
