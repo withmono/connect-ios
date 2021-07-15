@@ -10,7 +10,7 @@ import Foundation
 
 class ConnectEventMapper {
 
- public var eventNames = [
+ public static var eventNames = [
     "mono.connect.widget_opened": "OPENED",
     "mono.connect.error_occured": "ERROR",
     "mono.connect.institution_selected": "INSTITUTION_SELECTED",

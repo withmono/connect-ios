@@ -168,7 +168,7 @@ extension MonoWidget: WKScriptMessageHandler {
 
             // pass data on to onEvent
             if self.eventHandler != nil && !DEPRECATED_EVENTS.contains(type){
-                let connectEvent = ConnectEventMapper().map(messageBody)
+                let connectEvent = ConnectEventMapper.map(messageBody)
                 self.eventHandler!(connectEvent!)
             }
 
