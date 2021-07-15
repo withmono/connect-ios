@@ -10,17 +10,17 @@ import Foundation
 
 class ConnectEventMapper {
 
-public var eventNames = [
-                    "mono.connect.widget_opened": "OPENED",
-                    "mono.connect.error_occured": "ERROR",
-                    "mono.connect.institution_selected": "INSTITUTION_SELECTED",
-                    "mono.connect.auth_method_switched": "AUTH_METHOD_SWITCHED",
-                    "mono.connect.on_exit": "EXIT",
-                    "mono.connect.login_attempt": "SUBMIT_CREDENTIALS",
-                    "mono.connect.mfa_submitted": "SUBMIT_MFA",
-                    "mono.connect.account_linked": "ACCOUNT_LINKED",
-                    "mono.connect.account_selected": "ACCOUNT_SELECTED",
-                 ]
+ public var eventNames = [
+    "mono.connect.widget_opened": "OPENED",
+    "mono.connect.error_occured": "ERROR",
+    "mono.connect.institution_selected": "INSTITUTION_SELECTED",
+    "mono.connect.auth_method_switched": "AUTH_METHOD_SWITCHED",
+    "mono.connect.on_exit": "EXIT",
+    "mono.connect.login_attempt": "SUBMIT_CREDENTIALS",
+    "mono.connect.mfa_submitted": "SUBMIT_MFA",
+    "mono.connect.account_linked": "ACCOUNT_LINKED",
+    "mono.connect.account_selected": "ACCOUNT_SELECTED",
+ ]
 
   func map(_ dictionary: [String: Any]) -> ConnectEvent? {
 
@@ -69,12 +69,10 @@ public var eventNames = [
     }else{
         return ConnectEvent(eventName: name, type: type ?? "UNKNOWN", timestamp: Date())
     }
-
   }
 
-    func extractProperty(name: String, data: [String : Any]) -> Any {
-        var reference = data[name] as? Any
-        return reference
-    }
-
+  func extractProperty(name: String, data: [String : Any]) -> Any {
+    let reference = data[name]
+    return reference as Any
+  }
 }

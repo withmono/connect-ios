@@ -12,7 +12,6 @@ public class Mono {
     init(){ }
     
     public static func create(configuration: MonoConfiguration) -> UIViewController {
-        
         let flagError = configuration.reauthCode != nil
         
         if flagError{
@@ -22,11 +21,9 @@ public class Mono {
         let widget = MonoWidget(configuration: configuration)
 
         return widget
-
     }
     
     public static func reauthorise(configuration: MonoConfiguration) -> UIViewController {
-        
         let flagError = configuration.reauthCode == nil
         
         if flagError {
@@ -36,7 +33,6 @@ public class Mono {
         let widget = MonoWidget(configuration: configuration)
 
         return widget
-
     }
-
+    
 }

@@ -101,7 +101,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         var qs = [queryItemKey, queryItemVersion]
 
         if(code != nil) {
-          let queryItemCode = URLQueryItem(name: "code", value: code)
+          let queryItemCode = URLQueryItem(name: "reauth_token", value: code)
           qs.append(queryItemCode)
         }
         if(reference != nil) {
@@ -159,7 +159,7 @@ extension MonoWidget: WKScriptMessageHandler {
             // pass data on to onEvent
             if self.eventHandler != nil && !DEPRECATED_EVENTS.contains(type){
                 let connectEvent = ConnectEventMapper().map(messageBody)
-                self.eventHandler!(connectEvent as! ConnectEvent)
+                self.eventHandler!(connectEvent!)
             }
 
             switch type {
