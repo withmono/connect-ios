@@ -123,12 +123,18 @@ public class MonoWidget: UIViewController, WKUIDelegate {
             qs.append(queryItemCode)
         }
         if(selectedInstitution != nil){
-            let jsonEncoder = JSONEncoder()
-            let jsonData = try jsonEncoder.encode(selectedInstitution)
-            let json = String(data: jsonData, encoding: String.Encoding.utf16)
-            
-            let queryItemCode = URLQueryItem(name: "selectedInstitution", value: json)
-            qs.append(queryItemCode)
+            do {
+                let jsonEncoder = JSONEncoder()
+                let jsonData = try jsonEncoder.encode(selectedInstitution)
+                let json = String(data: jsonData, encoding: String.Encoding.utf16)
+                
+                let queryItemCode = URLQueryItem(name: "selectedInstitution", value: json)
+                qs.append(queryItemCode)
+            }
+            catch {
+                print("error = \(error.localizedDescription)")
+            }
+
         }
         
         components.queryItems = qs;

@@ -7,6 +7,6 @@
 
 import Foundation
 
-enum ConnectAuthMethod : String {
+public enum ConnectAuthMethod : String {
      case InternetBanking = "internet_banking", MobileBanking = "mobile_banking"
 }

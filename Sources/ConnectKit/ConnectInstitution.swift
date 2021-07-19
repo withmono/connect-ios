@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ConnectInstitution: Codable {
+public class ConnectInstitution: Codable {
     
     public let id: String // institution id in Mono DB
     public let authMethod: String // enum representing possible authentication methods
