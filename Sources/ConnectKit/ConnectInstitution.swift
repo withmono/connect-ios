@@ -15,12 +15,17 @@ class ConnectInstitution: Codable {
     public init(id: String, authMethod: ConnectAuthMethod) {
         self.id = id
         
-        switch authMethod
-        case .InternetBanking{
+        switch authMethod {
+        
+        case .InternetBanking:
             self.authMethod = "internet_banking"
-        }
-        case .MobileBanking {
+            
+        case .MobileBanking:
             self.authMethod = "mobile_banking"
+            
+        default:
+            self.authMethod = "internet_banking"
+            
         }
         
     }
