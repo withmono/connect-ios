@@ -17,8 +17,9 @@ public class MonoConfiguration {
     public var onClose: (() -> Void?)?
     public var onEvent: ((_ event: ConnectEvent) -> Void?)?
     public var reauthCode: String?
+    public var selectedInstitution: ConnectInstitution?
 
-    public init(publicKey: String, onSuccess: @escaping ((_ authCode: String) -> Void?), reference: String? = nil, reauthCode: String? = nil, onClose: (() -> Void?)? = nil, onEvent: ((_ event: ConnectEvent) -> Void?)? = nil){
+    public init(publicKey: String, onSuccess: @escaping ((_ authCode: String) -> Void?), reference: String? = nil, reauthCode: String? = nil, onClose: (() -> Void?)? = nil, onEvent: ((_ event: ConnectEvent) -> Void?)? = nil, selectedInstitution: ConnectInstitution? = nil){
 
         self.publicKey = publicKey
         self.onSuccess = onSuccess
@@ -42,6 +43,11 @@ public class MonoConfiguration {
             self.reauthCode = reauthCode
         }else{
             self.reauthCode = nil
+        }
+        if selectedInstitution != nil {
+            self.selectedInstitution = selectedInstitution
+        }else{
+            self.selectedInstitution = nil
         }
 
     }
