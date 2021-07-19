@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 
 public class MonoWidget: UIViewController, WKUIDelegate {
-    
+
     // contants
     let DEPRECATED_EVENTS = ["mono.connect.widget.closed", "mono.connect.widget.account_linked", "mono.modal.closed", "mono.modal.linked"]
 
@@ -21,7 +21,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
     var reference: String?
     var code: String?
     var selectedInstitution: ConnectInstitution?
-    
+
     // handlers
     let closeHandler: (() -> Void?)?
     let eventHandler: ((_ event: ConnectEvent) -> Void?)?
@@ -51,7 +51,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         }else{
             self.selectedInstitution = nil
         }
-        
+
         // handlers
         if(configuration.onClose != nil){
             self.closeHandler = configuration.onClose!
@@ -115,8 +115,8 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         var qs = [queryItemKey, queryItemVersion]
 
         if(code != nil) {
-            let queryItemCode = URLQueryItem(name: "code", value: code)
-            qs.append(queryItemCode)
+          let queryItemCode = URLQueryItem(name: "reauth_token", value: code)
+          qs.append(queryItemCode)
         }
         if(reference != nil) {
             let queryItemCode = URLQueryItem(name: "reference", value: reference)
@@ -127,7 +127,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
                 let jsonEncoder = JSONEncoder()
                 let jsonData = try jsonEncoder.encode(selectedInstitution)
                 let json = String(data: jsonData, encoding: String.Encoding.utf8)
-                                
+
                 let queryItemCode = URLQueryItem(name: "selectedInstitution", value: json)
                 qs.append(queryItemCode)
             }
@@ -136,17 +136,17 @@ public class MonoWidget: UIViewController, WKUIDelegate {
             }
 
         }
-        
+
         components.queryItems = qs;
 
         let request = URLRequest(url: components.url!)
         webView.load(request)
-        
+
         if self.eventHandler != nil{
             let connectEvent = ConnectEvent(eventName: "OPENED", type: "mono.connect.widget_opened", reference: self.reference, timestamp: Date())
             self.eventHandler!(connectEvent as! ConnectEvent)
         }
-        
+
     }
 
     func setupUI() {
@@ -194,7 +194,7 @@ extension MonoWidget: WKScriptMessageHandler {
             // pass data on to onEvent
             if self.eventHandler != nil && !DEPRECATED_EVENTS.contains(type){
                 let connectEvent = ConnectEventMapper.map(messageBody)
-                self.eventHandler!(connectEvent as! ConnectEvent)
+                self.eventHandler!(connectEvent!)
             }
 
             switch type {
