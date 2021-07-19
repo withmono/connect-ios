@@ -78,6 +78,7 @@ self.present(widget, animated: true, completion: nil)
 - [`onEvent`](#onEvent)
 - [`reference`](#reference)
 - [`reauthCode`](#reauthCode)
+- [`selectedInstitution`](#selectedInstitution)
 
 ### <a name="publicKey"></a> `publicKey`
 **String: Required**
@@ -106,7 +107,7 @@ let configuration = MonoConfiguration(
 )
 ```
 
-### <a name="onClose"></a> `onClose `
+### <a name="onClose"></a> `onClose`
 **(() -> Void): Optional**
 
 The optional closure is called when a user has specifically exited the Mono Connect flow. It does not take any arguments.
@@ -116,7 +117,7 @@ configuration.onClose = { () in
   print("Widget closed.")
 }
 ```
-### <a name="onEvent"></a> `onEvent `
+### <a name="onEvent"></a> `onEvent`
 **((_ event: ConnectEvent) -> Void): Optional**
 
 This optional closure is called when certain events in the Mono Connect flow have occurred, for example, when the user selected an institution. This enables your application to gain further insight into what is going on as the user goes through the Mono Connect flow.
@@ -129,7 +130,7 @@ configuration.onEvent = { (event) -> Void in
 }
 ```
 
-### <a name="reference"></a> `reference `
+### <a name="reference"></a> `reference`
 **String: Optional**
 
 When passing a reference to the configuration it will be provided back to you on all onEvent calls.
@@ -137,7 +138,7 @@ When passing a reference to the configuration it will be provided back to you on
 ```swift
 configuration.reference = "random_reference_string"
 ```
-### <a name="reauthCode"></a> `reauthCode `
+### <a name="reauthCode"></a> `reauthCode`
 **String: Optional**
 
 Reauthorisation of already authenticated accounts is done when MFA (Multi Factor Authentication) or 2FA is required by the institution for security purposes before more data can be fetched from the account.
@@ -147,6 +148,16 @@ Check Mono [docs](https://docs.mono.co/reference/data-sync-overview) on how to o
 ```swift
 configuration.reauthCode = "code_xyz"
 ```
+
+### <a name="selectedInstitution"></a> `selectedInstitution`
+**String: Optional**
+
+Passing a ConnectInstitution object will open the widget directly to the institution passed in the `id` field and will only allow the user to login to that institution and authentication method. You pass  `.InternetBanking` or `.MobileBanking` as possible options for the authentication method.
+
+```swift
+configuration.selectedInstitution = ConnectInstitution(id: "5f2d08c060b92e2888287706", authMethod: .InternetBanking)
+```
+Note: If an invalid institution id is passed the user is prompted to select an institution from the default list.
 
 ## API Reference
 
@@ -165,6 +176,7 @@ onClose: (() -> Void?)? // optional
 onEvent: ((_ event: ConnectEvent) -> Void?)? // optional
 reference: String // optional
 reauthCode: String // optional
+selectedInstitution: ConnectInstitution // optional
 ```
 #### Usage
 
@@ -184,6 +196,9 @@ configuration.onClose = { () -> Void in
   print("Widget closed.")
 }
 configuration.reference = "random_string"
+
+configuration.selectedInstitution = ConnectInstitution(id: "5f2d08c060b92e2888287706", authMethod: .InternetBanking)
+
 ````
 
 ### <a name="connectEvent"></a> ConnectEvent
@@ -221,6 +236,15 @@ institutionId: String? // id of institution
 institutionName: String? // name of institution
 timestamp: Date // timestamp of the event as a Date object
 ```
+
+### <a name="connectInstitution"></a> ConnectInstitution
+
+#### <a name="institutionId"></a> `id: String`
+
+The id of an institution as provided by Mono. An API will be released for a complete list shortly.
+
+#### <a name="authMethod"></a> `authMethod: Enum`
+Can be `.InternetBanking` for internet banking login or `.MobileBanking` for a mobile banking login.
 
 
 ## Examples
