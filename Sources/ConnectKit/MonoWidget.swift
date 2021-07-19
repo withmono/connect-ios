@@ -126,7 +126,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
             do {
                 let jsonEncoder = JSONEncoder()
                 let jsonData = try jsonEncoder.encode(selectedInstitution)
-                let json = String(data: jsonData, encoding: String.Encoding.utf16)
+                let json = String(data: jsonData, encoding: String.Encoding.utf8)
                 
                 print(json)
                 
