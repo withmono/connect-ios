@@ -128,6 +128,8 @@ public class MonoWidget: UIViewController, WKUIDelegate {
                 let jsonData = try jsonEncoder.encode(selectedInstitution)
                 let json = String(data: jsonData, encoding: String.Encoding.utf16)
                 
+                print(json)
+                
                 let queryItemCode = URLQueryItem(name: "selectedInstitution", value: json)
                 qs.append(queryItemCode)
             }
