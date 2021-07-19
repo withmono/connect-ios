@@ -10,12 +10,24 @@ import Foundation
 class ConnectInstitution: Codable {
     
     public let id: String // institution id in Mono DB
-    public let auth_method: ConnectAuthMethod // enum representing possible authentication methods
+    public let authMethod: String // enum representing possible authentication methods
 
     public init(id: String, authMethod: ConnectAuthMethod) {
         self.id = id
-        self.auth_method = authMethod
+        
+        switch authMethod
+        case .InternetBanking{
+            self.authMethod = "internet_banking"
+        }
+        case .MobileBanking {
+            self.authMethod = "mobile_banking"
+        }
+        
     }
 
+    enum CodingKeys: String, CodingKey {
+        case id
+        case authMethod = "auth_method"
+    }
     
 }
