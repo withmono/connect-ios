@@ -7,11 +7,11 @@ The Mono Connect SDK is a quick and secure way to link bank accounts to Mono fro
 DESC
 spec.homepage     = "https://mono.co"
 spec.license      = { :type => "MIT", :file => "LICENSE" }
-spec.author             = { "author" => "hello@mono.co" }
+spec.author             = { "author" => "tristan@mono.co" }
 spec.documentation_url = "https://github.com/withmono/connect-ios"
-spec.platforms = { :ios => "9.0", :osx => "10.15", :watchos => "6.0" }
+spec.platforms = { :ios => "9.0" }
 spec.swift_version = "5.3"
 spec.source       = { :git => "https://github.com/withmono/connect-ios.git", :tag => "#{spec.version}" }
-spec.source_files  = "Sources/PackageName/**/*.swift"
+spec.source_files  = "Sources/ConnectKit/**/*.swift"
 spec.xcconfig = { "SWIFT_VERSION" => "5.3" }
 end
