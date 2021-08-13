@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 
 public class MonoWidget: UIViewController, WKUIDelegate {
-    
+
     // contants
     let DEPRECATED_EVENTS = ["mono.connect.widget.closed", "mono.connect.widget.account_linked", "mono.modal.closed", "mono.modal.linked"]
 
@@ -20,6 +20,9 @@ public class MonoWidget: UIViewController, WKUIDelegate {
     // optionals
     var reference: String?
     var code: String?
+    var selectedInstitution: ConnectInstitution?
+
+    // handlers
     let closeHandler: (() -> Void?)?
     let eventHandler: ((_ event: ConnectEvent) -> Void?)?
 
@@ -43,6 +46,13 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         }else{
             self.reference = nil
         }
+        if configuration.selectedInstitution != nil {
+            self.selectedInstitution = configuration.selectedInstitution
+        }else{
+            self.selectedInstitution = nil
+        }
+
+        // handlers
         if(configuration.onClose != nil){
             self.closeHandler = configuration.onClose!
         }else{
@@ -99,7 +109,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
 
         var components = URLComponents()
         components.scheme="https"
-        components.host="connect.withmono.com"
+        components.host="studio.connect.withmono.com"
         let queryItemKey = URLQueryItem(name: "key", value: publicKey)
         let queryItemVersion = URLQueryItem(name: "version", value: "2021-06-03")
         var qs = [queryItemKey, queryItemVersion]
@@ -109,19 +119,34 @@ public class MonoWidget: UIViewController, WKUIDelegate {
           qs.append(queryItemCode)
         }
         if(reference != nil) {
-          let queryItemCode = URLQueryItem(name: "reference", value: reference)
-          qs.append(queryItemCode)
+            let queryItemCode = URLQueryItem(name: "reference", value: reference)
+            qs.append(queryItemCode)
         }
+        if(selectedInstitution != nil){
+            do {
+                let jsonEncoder = JSONEncoder()
+                let jsonData = try jsonEncoder.encode(selectedInstitution)
+                let json = String(data: jsonData, encoding: String.Encoding.utf8)
+
+                let queryItemCode = URLQueryItem(name: "selectedInstitution", value: json)
+                qs.append(queryItemCode)
+            }
+            catch {
+                print("error = \(error.localizedDescription)")
+            }
+
+        }
+
         components.queryItems = qs;
 
         let request = URLRequest(url: components.url!)
         webView.load(request)
-        
+
         if self.eventHandler != nil{
             let connectEvent = ConnectEvent(eventName: "OPENED", type: "mono.connect.widget_opened", reference: self.reference, timestamp: Date())
             self.eventHandler!(connectEvent as! ConnectEvent)
         }
-        
+
     }
 
     func setupUI() {
