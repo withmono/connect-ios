@@ -200,19 +200,27 @@ extension MonoWidget: WKScriptMessageHandler {
             switch type {
             case "mono.connect.widget.account_linked":
                 self.successHandler(data?["code"] as! String)
-                self.dismiss(animated: true, completion: nil)
+                self.dismiss(animated: true, completion: { [weak self] in
+                    self?.removeScriptMessageHandler(for: userContentController)
+                })
                 break
             case "mono.connect.widget.closed":
                 if closeHandler != nil {
                     closeHandler!()
                 }
-                self.dismiss(animated: true, completion: nil)
+                self.dismiss(animated: true, completion: { [weak self] in
+                    self?.removeScriptMessageHandler(for: userContentController)
+                })
                 break
             default:
 //                self.dismiss(animated: true, completion: nil)
                 break
             }
         }
+    }
+    
+    private func removeScriptMessageHandler(for userContentController: WKUserContentController) {
+        userContentController.removeScriptMessageHandler(forName: "mono")
     }
 }
 
