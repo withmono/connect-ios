@@ -109,7 +109,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
 
         var components = URLComponents()
         components.scheme="https"
-        components.host="studio.connect.withmono.com"
+        components.host="connect.withmono.com"
         let queryItemKey = URLQueryItem(name: "key", value: publicKey)
         let queryItemVersion = URLQueryItem(name: "version", value: "2021-06-03")
         var qs = [queryItemKey, queryItemVersion]
