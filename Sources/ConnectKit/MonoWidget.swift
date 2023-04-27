@@ -144,7 +144,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
 
         if self.eventHandler != nil{
             let connectEvent = ConnectEvent(eventName: "OPENED", type: "mono.connect.widget_opened", reference: self.reference, timestamp: Date())
-            self.eventHandler!(connectEvent as! ConnectEvent)
+            self.eventHandler!(connectEvent)
         }
 
     }
