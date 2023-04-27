@@ -43,6 +43,14 @@ yarn add mono-node
 - iOS 9.0 or greater
 - The latest version of the ConnectKit
 
+## To build without Rosetta
+To resolve the missing architecture issue when building on M1 and M2 Macs, please follow these instructions, particularly when building for simulator devices:
+
+    1. Add the two architectures, i386 and x86_64, to your project's settings.
+    2. Set the "Build Active Architecture Only" flag to "Yes".
+
+By adding these architectures and configuring the "Build Active Architecture Only" setting, you ensure that your project is compatible with both the Intel-based and Apple Silicon-based Macs, enabling successful builds on simulator devices.
+
 ## Usage
 
 Before you can open Mono Connect, you need to first create a `publicKey`. Your `publicKey` can be found in the [Mono Dashboard](https://app.withmono.com/apps). 
