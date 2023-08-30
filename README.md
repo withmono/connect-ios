@@ -149,13 +149,58 @@ configuration.reference = "random_reference_string"
 ### <a name="reauthCode"></a> `reauthCode`
 **String: Optional**
 
-Reauthorisation of already authenticated accounts is done when MFA (Multi Factor Authentication) or 2FA is required by the institution for security purposes before more data can be fetched from the account.
-
-Check Mono [docs](https://docs.mono.co/reference/data-sync-overview) on how to obtain `reauthCode` of an account.
-
+### Re-authorizing an Account with Mono: A Step-by-Step Guide
+#### Step 1: Generate re-authorisation token
+Firstly, Make an API call to the Re-auth (Endpoint)[https://docs.mono.co/reference/reauth-code] with your desired Account ID and your mono application secret key. If successful, this will return a re-auth token.
+##### Sample request:
 ```swift
-configuration.reauthCode = "code_xyz"
+import Foundation
+
+let headers = ["accept": "application/json"]
+
+let request = NSMutableURLRequest(url: NSURL(string: "https://api.withmono.com/accounts/id/reauthorise")! as URL, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
+request.httpMethod = "POST"
+request.allHTTPHeaderFields = headers
+
+let session = URLSession.shared
+let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+  if (error != nil) {
+    print(error as Any)
+  } else {
+    let httpResponse = response as? HTTPURLResponse
+    print(httpResponse)
+  }
+})
+
+dataTask.resume()
 ```
+##### Sample response:
+```json
+{
+  "token": "VwxcfeLRZvq1UlD5WiuN"
+}
+```
+#### Step 2: Initiate your SDK with re-authorisation config option
+With step one out of the way, proceed to retrieve the re-authorisation token in the response above and pass it to your config option in your installed SDK. Implementation example provided below for an Android SDK
+```swift
+let configuration = MonoConfiguration(
+  publicKey: test_pk_...", // your publicKey
+  onSuccess: { code in
+      print("Success with code: \(code)")
+  })
+  configuration.reference = "reference"
+  configuration.reauthCode = "code_xyz"
+  configuration.onEvent = { (event) -> Void in
+      print("Event Name: \(event.eventName), Event Time\(event.data.timestamp)")
+      print("Event Reference: \(event.data.reference!)")
+}
+```
+#### Step 3: Trigger re-authorisation widget
+In this final step, ensure the widget is triggered open. Once opened the user provides a security information which can either: password, pin, OTP, token, security answer etc.
+If the re-authorisation process is successful, the user's account becomes re-authorised after which two things happen.
+a. The 'mono.events.account_reauthorized' webhook event is sent to the webhook URL that you specified on your dashboard app.
+b. Updated financial data gets returned on the Mono connect data APIs when an API request is been made.
+
 
 ### <a name="selectedInstitution"></a> `selectedInstitution`
 **String: Optional**
