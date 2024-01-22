@@ -11,7 +11,8 @@ public class MonoConfiguration {
     // required parameters
     public var publicKey: String
     public var onSuccess: ((_ authCode: String) -> Void?)
-
+    public var customer: MonoCustomer
+    
     // optional parameters
     public var reference: String?
     public var onClose: (() -> Void?)?
@@ -19,10 +20,11 @@ public class MonoConfiguration {
     public var reauthCode: String?
     public var selectedInstitution: ConnectInstitution?
 
-    public init(publicKey: String, onSuccess: @escaping ((_ authCode: String) -> Void?), reference: String? = nil, reauthCode: String? = nil, onClose: (() -> Void?)? = nil, onEvent: ((_ event: ConnectEvent) -> Void?)? = nil, selectedInstitution: ConnectInstitution? = nil){
+    public init(publicKey: String, customer: MonoCustomer, onSuccess: @escaping ((_ authCode: String) -> Void?), reference: String? = nil, reauthCode: String? = nil, onClose: (() -> Void?)? = nil, onEvent: ((_ event: ConnectEvent) -> Void?)? = nil, selectedInstitution: ConnectInstitution? = nil){
 
         self.publicKey = publicKey
         self.onSuccess = onSuccess
+        self.customer = customer
 
         if onClose != nil {
             self.onClose = onClose!
