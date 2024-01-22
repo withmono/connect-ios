@@ -114,7 +114,8 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         components.host="connect.mono.co"
         let queryItemKey = URLQueryItem(name: "key", value: publicKey)
         let queryItemVersion = URLQueryItem(name: "version", value: "2023-12-14")
-        var qs = [queryItemKey, queryItemVersion]
+        let queryScope = URLQueryItem(name: "scope", value: "auth")
+        var qs = [queryItemKey, queryItemVersion, queryScope]
 
         do {
             let jsonEncoder = JSONEncoder()
