@@ -7,10 +7,20 @@ public struct MonoCustomer: Codable {
     public let identity: MonoCustomerIdentity?
     
     public init(id: String? = nil, name: String? = nil, email: String? = nil, identity: MonoCustomerIdentity? = nil) {
-        self.id = id
-        self.name = name
-        self.email = email
+        // Validate that name and email are provided when id is not passed
+        if id == nil {
+            guard let providedName = name, let providedEmail = email else {
+                fatalError("Both name and email are required when id is not provided.")
+            }
+            self.name = providedName
+            self.email = providedEmail
+        } else {
+            self.name = name
+            self.email = email
+        }
+        
         self.identity = identity
+        self.id = id
     }
     
     enum CodingKeys: String, CodingKey {
