@@ -64,6 +64,7 @@ import ConnectKit
 ```swift
 let configuration = MonoConfiguration(
   publicKey: "test_pk_...",
+  customer: MonoCustomer(id: "customer_id"),
   onSuccess: { code in
     print("Success with code: \(code)")
  })
@@ -81,6 +82,7 @@ self.present(widget, animated: true, completion: nil)
 ## Configuration Options
 
 - [`publicKey`](#publicKey)
+- [`customer`](#customer)
 - [`onSuccess`](#onSuccess)
 - [`onClose`](#onClose)
 - [`onEvent`](#onEvent)
@@ -101,6 +103,25 @@ let configuration = MonoConfiguration(
  })
 ```
 
+### <a name="customer"></a> `customer`
+**String: Required**
+
+```swift
+// Existing customer
+let customer = MonoCustomer(id: "611aa53041247f2801efb222")
+
+// new customer
+let identity = MonoCustomerIdentity(type: "bvn", number: "2323233239")
+let customer = MonoCustomer(name: "Samuel Olumide", email: "samuel.olumide@gmail.com", identity: identity)
+
+let configuration = MonoConfiguration(
+  publicKey: "test_pk_...",
+  customer: customer,
+  onSuccess: { code in
+    print("Success with code: \(code)")
+ })
+```
+
 ### <a name="onSuccess"></a> `onSuccess`
 **((_ code: String) -> Void): Required**
 
@@ -109,6 +130,7 @@ The closure is called when a user has successfully onboarded their account. It s
 ```swift
 let configuration = MonoConfiguration(
   publicKey: "test_pk_...",
+  customer: customer,
   onSuccess: { code in
     print("Success with token: \(code)")
   }
@@ -184,7 +206,7 @@ dataTask.resume()
 With step one out of the way, proceed to retrieve the re-authorisation token in the response above and pass it to your config option in your installed SDK. Implementation example provided below for an Android SDK
 ```swift
 let configuration = MonoConfiguration(
-  publicKey: test_pk_...", // your publicKey
+  publicKey: "test_pk_...", // your publicKey
   onSuccess: { code in
       print("Success with code: \(code)")
   })
@@ -224,6 +246,7 @@ The configuration option is passed to Mono.create(config: MonoConfiguration) or 
 
 ```swift
 publicKey: String // required
+customer: MonoCustomer, // optional
 onSuccesss: (_ code: String) -> Void // required
 onClose: (() -> Void?)? // optional
 onEvent: ((_ event: ConnectEvent) -> Void?)? // optional
@@ -320,9 +343,12 @@ class ViewController: UIViewController {
   }
 
   @IBAction func AuthenticateWithMono(_ sender: UIButton) {
-        
+    // let identity = MonoCustomerIdentity(type: "bvn", number: "2323233239")
+    // let customer = MonoCustomer(name: "Samuel Olumide", email: "samuel.olumide@gmail.com", identity: identity)
+    let customer = MonoCustomer(id: "611aa53041247f2801efb222") // mono customer id
     let configuration = MonoConfiguration(
    	  publicKey: "test_pk_...",
+      customer: customer,
       onSuccess: { code in
         print("Success with code: \(code)")
       })
@@ -390,46 +416,3 @@ If you would like to contribute to the Mono Connect iOS SDK, please make sure to
 ## License
 
 [MIT](https://github.com/withmono/connect-ios/tree/master/LICENSE) for more information.
-
-
-
-
-# Deprecated Implementation
-
-**Please consider migrating to the newest implementation that supports new features such as `onEvent`, `reference`, and `reauthCode`.**
-
-This package makes it very easy to use Mono connect widget in your swift/ios project.
-
-Request access [here](https://app.withmono.com/register) to get your API keys
-
-
-## Usage
-
-```swift
-import UIKit
-import ConnectIOS
-
-class ViewController: UIViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-    }
-
-    // MARK: Actions
-    @IBAction func AuthenticateWithMono(_ sender: UIButton) {
-        let connect = MonoConnect(publicKey: <YOUR_MONO_PUBLIC_KEY_HERE>, onClose: {() -> Void in print("widget closed")}, onSuccess: {(code) -> Void in print("successfully linked account: \(code)")})
-        let widget = connect.GetWidget()
-        self.present(widget, animated: true, completion: nil)
-    }
-    
-    // MARK: Actions
-    @IBAction func ReauthoriseUser(_ sender: UIButton) {
-        let connect = MonoConnect(publicKey: <YOUR_MONO_PUBLIC_KEY_HERE>, onClose: {() -> Void in print("widget closed")}, onSuccess: {(code) -> Void in print("successfully reauthorised account: \(code)")})
-        let widget = connect.Reauthorise(code: "code_xyz")
-        self.present(widget, animated: true, completion: nil)
-    }
-}
-```
-
-Do not forget to replace <YOUR_MONO_PUBLIC_KEY> with your real public key. Do not use your secret key anywhere with this package.

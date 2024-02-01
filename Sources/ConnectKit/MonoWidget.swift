@@ -15,6 +15,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
 
     // required
     var publicKey: String
+    var customer: MonoCustomer
     let successHandler: ((_ authCode: String) -> Void?)
 
     // optionals
@@ -34,6 +35,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         // required
         self.publicKey = configuration.publicKey
         self.successHandler = configuration.onSuccess
+        self.customer = configuration.customer
 
         // optionals
         if configuration.reauthCode != nil {
@@ -109,10 +111,24 @@ public class MonoWidget: UIViewController, WKUIDelegate {
 
         var components = URLComponents()
         components.scheme="https"
-        components.host="connect.withmono.com"
+        components.host="connect.mono.co"
         let queryItemKey = URLQueryItem(name: "key", value: publicKey)
-        let queryItemVersion = URLQueryItem(name: "version", value: "2021-06-03")
-        var qs = [queryItemKey, queryItemVersion]
+        let queryItemVersion = URLQueryItem(name: "version", value: "2023-12-14")
+        let queryScope = URLQueryItem(name: "scope", value: "auth")
+        var qs = [queryItemKey, queryItemVersion, queryScope]
+
+        do {
+            let jsonEncoder = JSONEncoder()
+            let data = WidgetData(customer: customer)
+            let jsonData = try jsonEncoder.encode(data)
+            let json = String(data: jsonData, encoding: String.Encoding.utf8)
+            
+            let queryItemCode = URLQueryItem(name: "data", value: json)
+            qs.append(queryItemCode)
+        }
+        catch {
+            print("error = \(error.localizedDescription)")
+        }
 
         if(code != nil) {
           let queryItemCode = URLQueryItem(name: "reauth_token", value: code)
@@ -236,4 +252,16 @@ extension MonoWidget: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         self.dismiss(animated: true, completion: nil)
     }
+}
+
+public struct WidgetData: Codable {
+    public let customer: MonoCustomer
+
+    public init(customer: MonoCustomer) {
+        self.customer = customer
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case customer
+   }
 }
