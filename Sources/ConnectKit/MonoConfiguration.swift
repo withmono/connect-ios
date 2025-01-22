@@ -18,12 +18,16 @@ public class MonoConfiguration {
     public var onClose: (() -> Void?)?
     public var onEvent: ((_ event: ConnectEvent) -> Void?)?
     public var accountId: String?
+    public var scope: String?
     public var selectedInstitution: ConnectInstitution?
 
     public init(
-        publicKey: String, customer: MonoCustomer,
+        publicKey: String,
+        customer: MonoCustomer,
         onSuccess: @escaping ((_ authCode: String) -> Void?),
-        reference: String? = nil, accountId: String? = nil,
+        reference: String? = nil,
+        accountId: String? = nil,
+        scope: String? = nil,
         onClose: (() -> Void?)? = nil,
         onEvent: ((_ event: ConnectEvent) -> Void?)? = nil,
         selectedInstitution: ConnectInstitution? = nil
@@ -52,6 +56,11 @@ public class MonoConfiguration {
             self.accountId = accountId
         } else {
             self.accountId = nil
+        }
+        if scope != nil {
+            self.scope = scope
+        } else {
+            self.scope = nil
         }
         if selectedInstitution != nil {
             self.selectedInstitution = selectedInstitution

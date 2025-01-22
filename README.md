@@ -264,6 +264,7 @@ onClose: (() -> Void?)? // optional
 onEvent: ((_ event: ConnectEvent) -> Void?)? // optional
 reference: String // optional
 accountId: String // optional
+scope: String // optional
 selectedInstitution: ConnectInstitution // optional
 ```
 #### Usage

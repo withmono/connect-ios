@@ -24,6 +24,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
     // optionals
     var reference: String?
     var accountId: String?
+    var scope: String?
     var selectedInstitution: ConnectInstitution?
 
     // handlers
@@ -45,6 +46,11 @@ public class MonoWidget: UIViewController, WKUIDelegate {
             self.accountId = configuration.accountId
         } else {
             self.accountId = nil
+        }
+        if configuration.scope != nil {
+            self.scope = configuration.scope
+        } else {
+            self.scope = nil
         }
         if configuration.reference != nil {
             self.reference = configuration.reference
@@ -124,9 +130,11 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         let queryItemKey = URLQueryItem(name: "key", value: publicKey)
         let queryItemVersion = URLQueryItem(
             name: "version", value: "2023-12-14")
+        
+        let resolvedScope = accountId != nil && (scope == nil || scope == "auth") ? "reauth" : scope
         let queryScope = URLQueryItem(
             name: "scope",
-            value: accountId != nil ? "reauth" : "auth"
+            value: resolvedScope ?? "auth"
         )
         var qs = [queryItemKey, queryItemVersion, queryScope]
 
