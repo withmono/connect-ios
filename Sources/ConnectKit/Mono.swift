@@ -9,30 +9,38 @@ import UIKit
 
 public class Mono {
 
-    init(){ }
-    
-    public static func create(configuration: MonoConfiguration) -> UIViewController {
-        let flagError = configuration.reauthCode != nil
-        
-        if flagError{
-            print("You cannot pass a reauthCode: String to the default create function, use Mono.reauthorise() instead.")
-        }
-        
-        let widget = MonoWidget(configuration: configuration)
+    init() {}
 
-        return widget
-    }
-    
-    public static func reauthorise(configuration: MonoConfiguration) -> UIViewController {
-        let flagError = configuration.reauthCode == nil
-        
+    public static func create(configuration: MonoConfiguration)
+        -> UIViewController
+    {
+        let flagError = configuration.accountId != nil
+
         if flagError {
-            print("Reauthorisation requires you to pass a reauthCode: String to the configuration object.")
+            print(
+                "You cannot pass an accountId: String to the default create function, use Mono.reauthorise() instead."
+            )
         }
-        
+
         let widget = MonoWidget(configuration: configuration)
 
         return widget
     }
-    
+
+    public static func reauthorise(configuration: MonoConfiguration)
+        -> UIViewController
+    {
+        let flagError = configuration.accountId == nil
+
+        if flagError {
+            print(
+                "Reauthorisation requires you to pass an accountId: String to the configuration object."
+            )
+        }
+
+        let widget = MonoWidget(configuration: configuration)
+
+        return widget
+    }
+
 }

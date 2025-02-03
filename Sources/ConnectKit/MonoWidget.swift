@@ -11,7 +11,10 @@ import WebKit
 public class MonoWidget: UIViewController, WKUIDelegate {
 
     // contants
-    let DEPRECATED_EVENTS = ["mono.connect.widget.closed", "mono.connect.widget.account_linked", "mono.modal.closed", "mono.modal.linked"]
+    let DEPRECATED_EVENTS = [
+        "mono.connect.widget.closed", "mono.connect.widget.account_linked",
+        "mono.modal.closed", "mono.modal.linked",
+    ]
 
     // required
     var publicKey: String
@@ -20,7 +23,8 @@ public class MonoWidget: UIViewController, WKUIDelegate {
 
     // optionals
     var reference: String?
-    var code: String?
+    var accountId: String?
+    var scope: String?
     var selectedInstitution: ConnectInstitution?
 
     // handlers
@@ -38,32 +42,37 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         self.customer = configuration.customer
 
         // optionals
-        if configuration.reauthCode != nil {
-            self.code = configuration.reauthCode
-        }else{
-            self.code = nil
+        if configuration.accountId != nil {
+            self.accountId = configuration.accountId
+        } else {
+            self.accountId = nil
+        }
+        if configuration.scope != nil {
+            self.scope = configuration.scope
+        } else {
+            self.scope = nil
         }
         if configuration.reference != nil {
             self.reference = configuration.reference
-        }else{
+        } else {
             self.reference = nil
         }
         if configuration.selectedInstitution != nil {
             self.selectedInstitution = configuration.selectedInstitution
-        }else{
+        } else {
             self.selectedInstitution = nil
         }
 
         // handlers
-        if(configuration.onClose != nil){
+        if configuration.onClose != nil {
             self.closeHandler = configuration.onClose!
-        }else{
+        } else {
             self.closeHandler = nil
         }
 
-        if(configuration.onEvent != nil){
+        if configuration.onEvent != nil {
             self.eventHandler = configuration.onEvent!
-        }else{
+        } else {
             self.eventHandler = nil
         }
 
@@ -71,7 +80,8 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         self.progressView.sizeToFit()
         super.init(nibName: nil, bundle: nil)
 
-        self.progressView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width * 2, height: 2)
+        self.progressView.frame = CGRect(
+            x: 0, y: 0, width: self.view.frame.width * 2, height: 2)
     }
 
     required init?(coder: NSCoder) {
@@ -79,8 +89,8 @@ public class MonoWidget: UIViewController, WKUIDelegate {
     }
 
     deinit {
-       webView.removeObserver(self, forKeyPath: "estimatedProgress")
-       progressView.removeFromSuperview()
+        webView.removeObserver(self, forKeyPath: "estimatedProgress")
+        progressView.removeFromSuperview()
     }
 
     lazy var webView: WKWebView = {
@@ -89,12 +99,17 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         webView.uiDelegate = self
         webView.navigationDelegate = self
         webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
+        webView.addObserver(
+            self, forKeyPath: #keyPath(WKWebView.estimatedProgress),
+            options: .new, context: nil)
 
         return webView
     }()
 
-    override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override public func observeValue(
+        forKeyPath keyPath: String?, of object: Any?,
+        change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?
+    ) {
 
         if keyPath == "estimatedProgress" {
             let progressFloat = Float(webView.estimatedProgress)
@@ -110,56 +125,61 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         contentController.add(self, name: "mono")
 
         var components = URLComponents()
-        components.scheme="https"
-        components.host="connect.mono.co"
+        components.scheme = "https"
+        components.host = "connect.mono.co"
         let queryItemKey = URLQueryItem(name: "key", value: publicKey)
-        let queryItemVersion = URLQueryItem(name: "version", value: "2023-12-14")
-        let queryScope = URLQueryItem(name: "scope", value: "auth")
+        let queryItemVersion = URLQueryItem(
+            name: "version", value: "2023-12-14")
+        
+        let resolvedScope = accountId != nil && (scope == nil || scope == "auth") ? "reauth" : scope
+        let queryScope = URLQueryItem(
+            name: "scope",
+            value: resolvedScope ?? "auth"
+        )
         var qs = [queryItemKey, queryItemVersion, queryScope]
 
         do {
             let jsonEncoder = JSONEncoder()
-            let data = WidgetData(customer: customer)
+            let data = WidgetData(customer: customer, account: accountId)
             let jsonData = try jsonEncoder.encode(data)
             let json = String(data: jsonData, encoding: String.Encoding.utf8)
-            
+
             let queryItemCode = URLQueryItem(name: "data", value: json)
             qs.append(queryItemCode)
-        }
-        catch {
+        } catch {
             print("error = \(error.localizedDescription)")
         }
 
-        if(code != nil) {
-          let queryItemCode = URLQueryItem(name: "reauth_token", value: code)
-          qs.append(queryItemCode)
-        }
-        if(reference != nil) {
-            let queryItemCode = URLQueryItem(name: "reference", value: reference)
+        if reference != nil {
+            let queryItemCode = URLQueryItem(
+                name: "reference", value: reference)
             qs.append(queryItemCode)
         }
-        if(selectedInstitution != nil){
+        if selectedInstitution != nil {
             do {
                 let jsonEncoder = JSONEncoder()
                 let jsonData = try jsonEncoder.encode(selectedInstitution)
-                let json = String(data: jsonData, encoding: String.Encoding.utf8)
+                let json = String(
+                    data: jsonData, encoding: String.Encoding.utf8)
 
-                let queryItemCode = URLQueryItem(name: "selectedInstitution", value: json)
+                let queryItemCode = URLQueryItem(
+                    name: "selectedInstitution", value: json)
                 qs.append(queryItemCode)
-            }
-            catch {
+            } catch {
                 print("error = \(error.localizedDescription)")
             }
 
         }
 
-        components.queryItems = qs;
+        components.queryItems = qs
 
         let request = URLRequest(url: components.url!)
         webView.load(request)
 
-        if self.eventHandler != nil{
-            let connectEvent = ConnectEvent(eventName: "OPENED", type: "mono.connect.widget_opened", reference: self.reference, timestamp: Date())
+        if self.eventHandler != nil {
+            let connectEvent = ConnectEvent(
+                eventName: "OPENED", type: "mono.connect.widget_opened",
+                reference: self.reference, timestamp: Date())
             self.eventHandler!(connectEvent)
         }
 
@@ -173,14 +193,19 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         if #available(iOS 11.0, *) {
             NSLayoutConstraint.activate([
                 webView.topAnchor
-                    .constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+                    .constraint(
+                        equalTo: self.view.safeAreaLayoutGuide.topAnchor),
                 webView.leftAnchor
-                    .constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
+                    .constraint(
+                        equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
                 webView.bottomAnchor
-                    .constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+                    .constraint(
+                        equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
                 webView.rightAnchor
-                    .constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor)
+                    .constraint(
+                        equalTo: self.view.safeAreaLayoutGuide.rightAnchor),
             ])
+            
         } else {
             // Fallback on earlier versions
         }
@@ -191,7 +216,9 @@ extension MonoWidget: WKScriptMessageHandler {
     public func parseJSON(str: String?) -> [String: AnyObject]? {
         if let data = str?.data(using: .utf8) {
             do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: AnyObject]
+                let json =
+                    try JSONSerialization.jsonObject(with: data, options: [])
+                    as? [String: AnyObject]
                 return json
             } catch let error as NSError {
                 print("Failed to load: \(error.localizedDescription)")
@@ -202,13 +229,18 @@ extension MonoWidget: WKScriptMessageHandler {
         return nil
     }
 
-    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == "mono", let messageBody = parseJSON(str: (message.body as! String)){
+    public func userContentController(
+        _ userContentController: WKUserContentController,
+        didReceive message: WKScriptMessage
+    ) {
+        if message.name == "mono",
+            let messageBody = parseJSON(str: (message.body as! String))
+        {
             let data = messageBody["data"] as? [String: Any]
             let type = messageBody["type"] as! String
 
             // pass data on to onEvent
-            if self.eventHandler != nil && !DEPRECATED_EVENTS.contains(type){
+            if self.eventHandler != nil && !DEPRECATED_EVENTS.contains(type) {
                 let connectEvent = ConnectEventMapper.map(messageBody)
                 self.eventHandler!(connectEvent!)
             }
@@ -233,35 +265,63 @@ extension MonoWidget: WKScriptMessageHandler {
 }
 
 extension MonoWidget: WKNavigationDelegate {
-    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        webView.evaluateJavaScript("window.MonoClientInterface = window.webkit.messageHandlers.mono;")
+    public func webView(
+        _ webView: WKWebView, didFinish navigation: WKNavigation!
+    ) {
+        webView.evaluateJavaScript(
+            "window.MonoClientInterface = window.webkit.messageHandlers.mono;")
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-            self.progressView.isHidden = true;
-        })
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + 0.5,
+            execute: {
+                self.progressView.isHidden = true
+            })
     }
 
-    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    public func webView(
+        _ webView: WKWebView,
+        didStartProvisionalNavigation navigation: WKNavigation!
+    ) {
         progressView.isHidden = false
     }
 
-    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error){
+    public func webView(
+        _ webView: WKWebView, didFail navigation: WKNavigation!,
+        withError error: Error
+    ) {
         self.dismiss(animated: true, completion: nil)
     }
 
-    public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+    public func webView(
+        _ webView: WKWebView,
+        didFailProvisionalNavigation navigation: WKNavigation!,
+        withError error: Error
+    ) {
         self.dismiss(animated: true, completion: nil)
     }
 }
 
 public struct WidgetData: Codable {
     public let customer: MonoCustomer
+    public var account: String?
 
-    public init(customer: MonoCustomer) {
+    public init(customer: MonoCustomer, account: String? = nil) {
         self.customer = customer
+        self.account = account
     }
     
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(customer, forKey: .customer)
+        
+        if let account = account {
+            try container.encode(account, forKey: .account)
+        }
+    }
+
     enum CodingKeys: String, CodingKey {
         case customer
-   }
+        case account
+    }
 }
