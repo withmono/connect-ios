@@ -25,23 +25,19 @@ Go to File -> Swift Packages -> Add Package Dependency...
 
 Then enter the URL for this package `https://github.com/withmono/connect-ios.git` and select the most recent version.
 
-<!--
-
-Install the package with:
-
-```sh
-npm install mono-node --save
-# or
-yarn add mono-node
-```
-
--->
-
 ## Requirements
 
 - Xcode 11.0 or greater
 - iOS 9.0 or greater
 - The latest version of the ConnectKit
+- Add the key `Privacy - Camera Usage Description` and a usage description to your `Info.plist`.
+
+If editing `Info.plist` as text, add:
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>your usage description here</string>
+```
 
 ## To build without Rosetta
 To resolve the missing architecture issue when building on M1 and M2 Macs, please follow these instructions, particularly when building for simulator devices:
