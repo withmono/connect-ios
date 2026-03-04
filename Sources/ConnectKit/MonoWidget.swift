@@ -25,6 +25,7 @@ public class MonoWidget: UIViewController, WKUIDelegate {
     var reference: String?
     var accountId: String?
     var scope: String?
+    var checkAccountMatch: Bool?
     var selectedInstitution: ConnectInstitution?
 
     // handlers
@@ -56,6 +57,11 @@ public class MonoWidget: UIViewController, WKUIDelegate {
             self.reference = configuration.reference
         } else {
             self.reference = nil
+        }
+        if configuration.checkAccountMatch != nil {
+            self.checkAccountMatch = configuration.checkAccountMatch
+        } else {
+            self.checkAccountMatch = nil
         }
         if configuration.selectedInstitution != nil {
             self.selectedInstitution = configuration.selectedInstitution
@@ -153,6 +159,11 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         if reference != nil {
             let queryItemCode = URLQueryItem(
                 name: "reference", value: reference)
+            qs.append(queryItemCode)
+        }
+        if let checkAccountMatch = checkAccountMatch {
+            let queryItemCode = URLQueryItem(
+                name: "check_account_match", value: String(checkAccountMatch))
             qs.append(queryItemCode)
         }
         if selectedInstitution != nil {
