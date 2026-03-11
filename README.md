@@ -85,6 +85,7 @@ self.present(widget, animated: true, completion: nil)
 - [`reference`](#reference)
 - [`accountId`](#accountId)
 - [`selectedInstitution`](#selectedInstitution)
+- [`checkAccountMatch`](#checkAccountMatch)
 
 ### <a name="publicKey"></a> `publicKey`
 **String: Required**
@@ -233,14 +234,25 @@ b. Updated financial data gets returned on the Mono connect data APIs when an AP
 
 
 ### <a name="selectedInstitution"></a> `selectedInstitution`
-**String: Optional**
+**ConnectInstitution: Optional**
 
-Passing a ConnectInstitution object will open the widget directly to the institution passed in the `id` field and will only allow the user to login to that institution and authentication method. You pass  `.InternetBanking` or `.MobileBanking` as possible options for the authentication method.
+Passing a ConnectInstitution will open the widget directly to the institution passed in the `id` field and will only allow the user to login to that institution and authentication method. You can pass `.InternetBanking` or `.MobileBanking` as possible options for the `authMethod`. To use the [account match feature](#checkAccountMatch), pass the customer's `accountNumber`.
 
 ```swift
 configuration.selectedInstitution = ConnectInstitution(id: "5f2d08c060b92e2888287706", authMethod: .InternetBanking)
 ```
 Note: If an invalid institution id is passed the user is prompted to select an institution from the default list.
+
+### <a name="checkAccountMatch"></a> `checkAccountMatch`
+**Bool: Optional**
+
+The Account Match feature allows you to verify that the account number provided by a customer matches the account number returned from their linked bank account.
+
+```swift
+configuration.selectedInstitution = ConnectInstitution(id: "5f2d08bf60b92e2888287704", authMethod: .InternetBanking, accountNumber: "02605538421")
+
+configuration.checkAccountMatch = true
+```
 
 ## API Reference
 
