@@ -259,7 +259,6 @@ extension MonoWidget: WKScriptMessageHandler {
             switch type {
             case "mono.connect.widget.account_linked":
                 self.successHandler(data?["code"] as! String)
-                self.dismiss(animated: true, completion: nil)
                 break
             case "mono.connect.widget.closed":
                 if closeHandler != nil {
@@ -268,7 +267,6 @@ extension MonoWidget: WKScriptMessageHandler {
                 self.dismiss(animated: true, completion: nil)
                 break
             default:
-//                self.dismiss(animated: true, completion: nil)
                 break
             }
         }
