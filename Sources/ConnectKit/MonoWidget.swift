@@ -137,12 +137,15 @@ public class MonoWidget: UIViewController, WKUIDelegate {
         let queryItemVersion = URLQueryItem(
             name: "version", value: "2023-12-14")
         
+        let queryItemSDKVersion = URLQueryItem(
+            name: "sdk_version", value: MonoSDKVersion.version)
+
         let resolvedScope = accountId != nil && (scope == nil || scope == "auth") ? "reauth" : scope
         let queryScope = URLQueryItem(
             name: "scope",
             value: resolvedScope ?? "auth"
         )
-        var qs = [queryItemKey, queryItemVersion, queryScope]
+        var qs = [queryItemKey, queryItemVersion, queryItemSDKVersion, queryScope]
 
         do {
             let jsonEncoder = JSONEncoder()
