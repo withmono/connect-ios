@@ -7,5 +7,5 @@
 // See Tests/ConnectKitTests/SDKVersionTests.swift.
 
 public enum MonoSDKVersion {
-    static let version = "2.3.0"
+    static let version = "2.4.0"
 }
