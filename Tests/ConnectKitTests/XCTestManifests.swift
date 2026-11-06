@@ -4,6 +4,7 @@ import XCTest
 public func allTests() -> [XCTestCaseEntry] {
     return [
         testCase(ConnectKitTests.allTests),
+        testCase(SDKVersionTests.allTests),
     ]
 }
 #endif
