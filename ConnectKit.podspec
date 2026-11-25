@@ -9,7 +9,7 @@ spec.homepage     = "https://mono.co"
 spec.license      = { :type => "MIT", :file => "LICENSE" }
 spec.author             = { "author" => "tristan@mono.co" }
 spec.documentation_url = "https://github.com/withmono/connect-ios"
-spec.platforms = { :ios => "9.0" }
+spec.platforms = { :ios => "15.0" }
 spec.swift_version = "5.3"
 spec.source       = { :git => "https://github.com/withmono/connect-ios.git", :tag => "#{spec.version}" }
 spec.source_files  = "Sources/ConnectKit/**/*.swift"
